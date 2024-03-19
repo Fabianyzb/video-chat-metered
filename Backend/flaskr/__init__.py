@@ -22,6 +22,7 @@ def create_room():
 
 
 # API Route to validate meeting
+@app.route("/api/validate/meeting", methods=['GET'])
 def validate_meeting():
     roomName = requests.args.get("roomName")
     if roomName:
