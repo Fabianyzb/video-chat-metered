@@ -11,13 +11,34 @@ function App() {
   // Will set it to true when the user joins the meeting
   // and update the UI.
   const [meetingJoined, setMeetingJoined] = useState(false);
+
   // Storing onlineUsers, updating this when a user joins
   // or leaves the meeting
   const [onlineUsers, setOnlineUsers] = useState([]);
+  //Another array will store the list of remote video and audio tracks.
+  const [remoteTracks, setRemoteTracks] = useState([]);
 
   // This useEffect hooks will contain all
   // event handler, like participantJoined, participantLeft etc.
-  useEffect(() => {}, []);
+  useEffect(() => {
+    meteredMeeting.on("remoteTrackStarted", (trackItem) => {});
+
+    meteredMeeting.on("remoteTrackStopped", (trackItem) => {});
+
+    meteredMeeting.on("participantJoined", (localTrackItem) => {});
+
+    meteredMeeting.on("participantLeft", (localTrackItem) => {});
+
+    meteredMeeting.on("onlineParticipants", (onlineParticipants) => {});
+
+    return () => {
+      meteredMeeting.removeListener("remoteTrackStarted");
+      meteredMeeting.removeListener("remoteTrackStopped");
+      meteredMeeting.removeListener("participantJoined");
+      meteredMeeting.removeListener("participantLeft");
+      meteredMeeting.removeListener("onlineParticipants");
+    };
+  });
 
   // Will call the API to create a new
   // room and join the user.
