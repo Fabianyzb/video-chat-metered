@@ -64,12 +64,21 @@ function App() {
 
   // Will call th API to validate the room
   // and join the user
-  function handleJoinMeeting(roomName, username) {}
-
   return (
     <div className="App">
       {meetingJoined ? (
-        <Meeting onlineUsers={onlineUsers} />
+        <Meeting
+          handleMicBtn={handleMicBtn}
+          handleCameraBtn={handleCameraBtn}
+          handelScreenBtn={handelScreenBtn}
+          handleLeaveBtn={handleLeaveBtn}
+          localVideoStream={localVideoStream}
+          onlineUsers={onlineUsers}
+          remoteTracks={remoteTracks}
+          username={username}
+          roomName={roomName}
+          meetingInfo={meetingInfo}
+        />
       ) : (
         <Join
           handleCreateMeeting={handleCreateMeeting}
