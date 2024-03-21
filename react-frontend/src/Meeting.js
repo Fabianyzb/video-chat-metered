@@ -1,6 +1,6 @@
 /*  Will contain the main Meeting Screen */
 
-import VideoTag from "/react-frontend/src/VideoTag";
+import VideoTag from "./Videotag";
 
 function Meeting({
   handleMicBtn,
