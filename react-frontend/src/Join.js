@@ -1,35 +1,32 @@
 /*  UI to Join and Existing Meeting or Create a new Meeting */
 
 import { useState } from "react";
+import "./styles/Join.css";
 
 function Join({ handleCreateMeeting, handleJoinMeeting }) {
   const [username, setUsername] = useState("");
   const [roomName, setRoomName] = useState("");
 
   return (
-    <div id="joinView" className="w-full items-center justify-center flex">
-      <div className="bg-base-300 w-11/12 max-w-screen-md  rounded mt-48 p-10">
+    <div id="joinView">
+      <div className="container">
         <div>
-          <label className="label">
-            <span className="label-text">Name:</span>
-          </label>
+          <label>Name:</label>
           <input
             value={username}
             onChange={(e) => {
               setUsername(e.target.value);
             }}
             type="text"
-            className="w-full input input-primary input-bordered"
+            className="input-field"
             placeholder="Enter your name"
           />
         </div>
 
-        <div className="divider">AND</div>
+        {/* <div className="text-center font-bold">AND</div> */}
 
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Meeting ID</span>
-          </label>
+        <div>
+          <label>Meeting ID</label>
           <div className="relative">
             <input
               value={roomName}
@@ -39,32 +36,27 @@ function Join({ handleCreateMeeting, handleJoinMeeting }) {
               id="meetingId"
               type="text"
               placeholder="Meeting ID"
-              className="w-full pr-16 input input-primary input-bordered"
+              className="input-field"
             />
-            <button
-              id="joinExistingMeeting"
-              className="absolute top-0 right-0 rounded-l-none btn btn-primary text-xs"
+            {/*  <button
+              onClick={() => {
+                handleJoinMeeting(roomName, username);
+              }}
+              className="button"
             >
-              <span
-                onClick={() => {
-                  handleJoinMeeting(roomName, username);
-                }}
-                className="hidden sm:block"
-              >
-                Join Existing Meeting
-              </span>
-              <span className="sm:hidden">Join</span>
-            </button>
+              Join Existing Meeting
+            </button> */}
           </div>
         </div>
-        <div className="divider">OR</div>
+
+        {/* <div className="text-center font-bold">OR</div> */}
+
         <div className="flex justify-center">
           <button
             onClick={() => {
               handleCreateMeeting(username);
             }}
-            id="createANewMeeting"
-            className="btn btn-primary"
+            className="button"
           >
             Create a new meeting
           </button>
