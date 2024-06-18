@@ -1,39 +1,26 @@
-/* Main container of the application */
-
 import axios from "axios";
 import { useEffect, useState } from "react";
-
 import Join from "./Join";
 import Meeting from "./Meeting";
 import MeetingEnded from "./MeetingEnded";
+import "./App.css"; // Asegúrate de importar el archivo CSS
 
-// Initializing the SDK
 const meteredMeeting = new window.Metered.Meeting();
-
 const API_LOCATION = "http://localhost:5000";
 
 function App() {
-  // Will set it to true when the user joins the meeting
-  // and update the UI.
   const [meetingJoined, setMeetingJoined] = useState(false);
-  // Storing onlineUsers, updating this when a user joins
-  // or leaves the meeting
   const [onlineUsers, setOnlineUsers] = useState([]);
-
   const [remoteTracks, setRemoteTracks] = useState([]);
-
   const [username, setUsername] = useState("");
-
   const [localVideoStream, setLocalVideoStream] = useState(null);
-
   const [micShared, setMicShared] = useState(false);
   const [cameraShared, setCameraShared] = useState(false);
   const [screenShared, setScreenShared] = useState(false);
   const [meetingEnded, setMeetingEnded] = useState(false);
   const [roomName, setRoomName] = useState(null);
   const [meetingInfo, setMeetingInfo] = useState({});
-  // This useEffect hooks will contain all
-  // event handler, like participantJoined, participantLeft etc.
+
   useEffect(() => {
     meteredMeeting.on("remoteTrackStarted", (trackItem) => {
       remoteTracks.push(trackItem);
@@ -72,19 +59,12 @@ function App() {
     };
   });
 
-  // Will call the API to create a new
-  // room and join the user.
   async function handleCreateMeeting(username) {
-    // Calling API to create room
     const { data } = await axios.post(API_LOCATION + "/api/create/room");
-    // Calling API to fetch Metered Domain
     const response = await axios.get(API_LOCATION + "/api/metered-domain");
-    // Extracting Metered Domain and Room Name
-    // From responses.
     const METERED_DOMAIN = response.data.METERED_DOMAIN;
     const roomName = data.roomName;
 
-    // Calling the join() of Metered SDK
     const joinResponse = await meteredMeeting.join({
       name: username,
       roomURL: METERED_DOMAIN + "/" + roomName,
@@ -96,23 +76,15 @@ function App() {
     setMeetingJoined(true);
   }
 
-  // Will call th API to validate the room
-  // and join the user
   async function handleJoinMeeting(roomName, username) {
-    // Calling API to validate the roomName
     const response = await axios.get(
       API_LOCATION + "/api/validate-meeting?roomName=" + roomName
     );
 
     if (response.data.roomFound) {
-      // Calling API to fetch Metered Domain
       const { data } = await axios.get(API_LOCATION + "/api/metered-domain");
-
-      // Extracting Metered Domain and Room Name
-      // From responses.
       const METERED_DOMAIN = data.METERED_DOMAIN;
 
-      // Calling the join() of Metered SDK
       const joinResponse = await meteredMeeting.join({
         name: username,
         roomURL: METERED_DOMAIN + "/" + roomName,
@@ -121,7 +93,6 @@ function App() {
       setUsername(username);
       setRoomName(roomName);
       setMeetingInfo(joinResponse);
-
       setMeetingJoined(true);
     } else {
       alert("Invalid roomName");
@@ -192,6 +163,22 @@ function App() {
           handleJoinMeeting={handleJoinMeeting}
         />
       )}
+
+      {/* Botones con Iconos */}
+      <div className="control-buttons">
+        <button onClick={handleMicBtn}>
+          <i className={`fas fa-microphone${micShared ? "" : "-slash"}`}></i>
+        </button>
+        <button onClick={handleCameraBtn}>
+          <i className={`fas fa-video${cameraShared ? "" : "-slash"}`}></i>
+        </button>
+        <button onClick={handelScreenBtn}>
+          <i className="fas fa-desktop"></i>
+        </button>
+        <button onClick={handleLeaveBtn} className="exit-button">
+          <i className="fas fa-times"></i>
+        </button>
+      </div>
     </div>
   );
 }
